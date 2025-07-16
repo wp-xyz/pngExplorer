@@ -1,7 +1,7 @@
-# bmpExplorer
+# pngExplorer
 
-Read the header of bmp files and displays the contained information, among them
-* Width and height of the image
-* Bits per pixel
-* Bit-to-color arrangement in files with 16 bits per pixel.
-* Palette colors
+Reads the chunks of png files and displays the contained information
+
+<img width="807" height="532" alt="grafik" src="https://github.com/user-attachments/assets/70ce62da-c79c-4a91-a550-3fa4a8271477" />
+
+
