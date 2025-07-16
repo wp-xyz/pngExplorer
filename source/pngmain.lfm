@@ -1,0 +1,160 @@
+object MainForm: TMainForm
+  Left = 571
+  Height = 500
+  Top = 258
+  Width = 805
+  Caption = 'MainForm'
+  ClientHeight = 500
+  ClientWidth = 805
+  LCLVersion = '4.99.0.0'
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  object Panel1: TPanel
+    Left = 0
+    Height = 500
+    Top = 0
+    Width = 218
+    Align = alLeft
+    BevelOuter = bvNone
+    ClientHeight = 500
+    ClientWidth = 218
+    TabOrder = 0
+    object ShellTreeView: TShellTreeView
+      Left = 0
+      Height = 251
+      Top = 0
+      Width = 218
+      Align = alClient
+      TabOrder = 0
+      Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
+      ShellListView = ShellListView
+    end
+    object ShellListView: TShellListView
+      Left = 0
+      Height = 244
+      Top = 256
+      Width = 218
+      Align = alBottom
+      Color = clDefault
+      HideSelection = False
+      Mask = '*.png'
+      TabOrder = 1
+      ShellTreeView = ShellTreeView
+      OnSelectItem = ShellListViewSelectItem
+    end
+    object TV_LV_Splitter: TSplitter
+      Cursor = crVSplit
+      Left = 0
+      Height = 5
+      Top = 251
+      Width = 218
+      Align = alBottom
+      ResizeAnchor = akBottom
+    end
+  end
+  object MainSplitter: TSplitter
+    Left = 218
+    Height = 500
+    Top = 0
+    Width = 5
+  end
+  object PageControl1: TPageControl
+    Left = 223
+    Height = 500
+    Top = 0
+    Width = 582
+    ActivePage = TabSheet2
+    Align = alClient
+    TabIndex = 1
+    TabOrder = 2
+    object TabSheet1: TTabSheet
+      Caption = 'Image'
+      ClientHeight = 472
+      ClientWidth = 574
+      object ScrollBox1: TScrollBox
+        Left = 0
+        Height = 472
+        Top = 0
+        Width = 574
+        HorzScrollBar.Page = 90
+        VertScrollBar.Page = 90
+        Align = alClient
+        BorderStyle = bsNone
+        ClientHeight = 472
+        ClientWidth = 574
+        TabOrder = 0
+        object Image1: TImage
+          Left = 0
+          Height = 90
+          Top = 0
+          Width = 90
+          AutoSize = True
+        end
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Chunks'
+      ClientHeight = 472
+      ClientWidth = 574
+      object Panel2: TPanel
+        Left = 0
+        Height = 472
+        Top = 0
+        Width = 574
+        Align = alClient
+        BevelOuter = bvNone
+        ClientHeight = 472
+        ClientWidth = 574
+        TabOrder = 0
+        object ChunkMemo: TMemo
+          Left = 96
+          Height = 472
+          Top = 0
+          Width = 478
+          Align = alClient
+          Font.Name = 'Liberation Mono'
+          ParentFont = False
+          TabOrder = 0
+        end
+        object Panel3: TPanel
+          Left = 0
+          Height = 472
+          Top = 0
+          Width = 96
+          Align = alLeft
+          BevelOuter = bvNone
+          ClientHeight = 472
+          ClientWidth = 96
+          Color = clWindow
+          ParentBackground = False
+          ParentColor = False
+          TabOrder = 1
+          object Image2: TImage
+            Left = 0
+            Height = 90
+            Top = 382
+            Width = 96
+            Align = alBottom
+            AutoSize = True
+            Center = True
+            Constraints.MaxHeight = 120
+            Proportional = True
+            Stretch = True
+            StretchOutEnabled = False
+          end
+          object lbChunks: TListBox
+            Left = 0
+            Height = 382
+            Top = 0
+            Width = 96
+            Align = alLeft
+            BorderStyle = bsNone
+            ItemHeight = 0
+            TabOrder = 0
+            OnClick = lbChunksClick
+          end
+        end
+      end
+    end
+  end
+end
