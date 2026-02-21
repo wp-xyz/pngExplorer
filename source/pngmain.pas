@@ -77,6 +77,7 @@ type
   TMainForm = class(TForm)
     Image1: TImage;
     Image2: TImage;
+    ImageList1: TImageList;
     lbChunks: TListBox;
     ChunkMemo: TMemo;
     PageControl1: TPageControl;
@@ -95,6 +96,8 @@ type
     procedure lbChunksClick(Sender: TObject);
     procedure ShellListViewSelectItem(Sender: TObject; Item: TListItem;
       Selected: Boolean);
+    procedure ShellGetImageIndex(Sender: TObject; Node: TTreeNode);
+    procedure ShellGetSelectedIndex(Sender: TObject; Node: TTreeNode);
   private
     FChunks: TpngChunkList;
     procedure ChunksToListbox;
@@ -243,6 +246,14 @@ procedure TMainForm.FormCreate(Sender: TObject);
 var
   fn, dir: String;
 begin
+ {$IFNDEF MSWINDOWS}
+  ShellTreeView.Images := ImageList1;
+  ShellTreeView.OnGetImageIndex := @ShellTreeViewGetImageIndex;
+  ShellTreeView.OnGetSelectedIndex := @ShellTreeViewGetSelectedIndex;
+
+  ShellListView.SmallImages := ImageList1;
+  ShellListView.OnGetImageIndex := @ShellListViewGetImageIndex;
+ {$ENDIF}
   FChunks := TpngChunkList.Create;
 
   Caption := APP_TITLE;
@@ -367,6 +378,24 @@ begin
     LoadFile(ShellListView.GetPathFromItem(Item));
     ChunkMemo.Lines.Clear;
   end;
+end;
+
+procedure TMainForm.ShellGetImageIndex(Sender: TObject;
+  Node: TTreeNode);
+begin
+  if Sender = ShellTreeView then
+    Node.ImageIndex := 0
+  else if Sender = ShellListView then
+    Node.ImageIndex := 2;
+end;
+
+procedure TMainForm.ShellGetSelectedIndex(Sender: TObject;
+  Node: TTreeNode);
+begin
+  if Sender = ShellTreeView then
+    Node.SelectedIndex := 1
+  else if Sender = ShellListView then
+    Node.ImageIndex := 3;
 end;
 
 procedure TMainForm.Show_bKGD(AChunk: TpngChunk);
