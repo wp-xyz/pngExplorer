@@ -402,7 +402,7 @@ end;
 procedure TMainForm.ShellTreeViewGetSelectedIndex(Sender: TObject;
   Node: TTreeNode);
 begin
-  Node.SelectedIndex := 1;
+  Node.SelectedIndex := 0;
 end;
 
 procedure TMainForm.Show_bKGD(AChunk: TpngChunk);
