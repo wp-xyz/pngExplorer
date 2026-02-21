@@ -12,7 +12,7 @@ uses
   // LazUtils
   LConvEncoding,
   // LCL
-  Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, ComCtrls, ShellCtrls;
+  Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, ComCtrls, ShellCtrls, ImgList;
 
 type
   TChunk_CHRM = packed record
@@ -77,7 +77,7 @@ type
   TMainForm = class(TForm)
     Image1: TImage;
     Image2: TImage;
-    ImageList1: TImageList;
+    ImageList: TImageList;
     lbChunks: TListBox;
     ChunkMemo: TMemo;
     PageControl1: TPageControl;
@@ -93,11 +93,13 @@ type
     TabSheet2: TTabSheet;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure ImageListGetWidthForPPI(Sender: TCustomImageList;
+      AImageWidth, APPI: Integer; var AResultWidth: Integer);
     procedure lbChunksClick(Sender: TObject);
-    procedure ShellListViewSelectItem(Sender: TObject; Item: TListItem;
-      Selected: Boolean);
-    procedure ShellGetImageIndex(Sender: TObject; Node: TTreeNode);
-    procedure ShellGetSelectedIndex(Sender: TObject; Node: TTreeNode);
+    procedure ShellListViewFileAdded(Sender: TObject; Item: TListItem);
+    procedure ShellListViewSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
+    procedure ShellTreeViewGetImageIndex(Sender: TObject; Node: TTreeNode);
+    procedure ShellTreeViewGetSelectedIndex(Sender: TObject; Node: TTreeNode);
   private
     FChunks: TpngChunkList;
     procedure ChunksToListbox;
@@ -247,12 +249,12 @@ var
   fn, dir: String;
 begin
  {$IFNDEF MSWINDOWS}
-  ShellTreeView.Images := ImageList1;
+  ShellTreeView.Images := ImageList;
   ShellTreeView.OnGetImageIndex := @ShellTreeViewGetImageIndex;
   ShellTreeView.OnGetSelectedIndex := @ShellTreeViewGetSelectedIndex;
 
-  ShellListView.SmallImages := ImageList1;
-  ShellListView.OnGetImageIndex := @ShellListViewGetImageIndex;
+  ShellListView.SmallImages := ImageList;
+  ShellListView.OnFileAdded := @ShellListViewFileAdded;
  {$ENDIF}
   FChunks := TpngChunkList.Create;
 
@@ -273,6 +275,12 @@ end;
 procedure TMainForm.FormDestroy(Sender: TObject);
 begin
   FChunks.Free;
+end;
+
+procedure TMainForm.ImageListGetWidthForPPI(Sender: TCustomImageList;
+  AImageWidth, APPI: Integer; var AResultWidth: Integer);
+begin
+  AResultWidth := AImageWidth * APPI div 96;
 end;
 
 function TMainForm.GetChunk(AIndex: Integer): TpngChunk;
@@ -370,6 +378,11 @@ begin
   AStream.Position := 0;
 end;
 
+procedure TMainForm.ShellListViewFileAdded(Sender: TObject; Item: TListItem);
+begin
+  Item.ImageIndex := 1;
+end;
+
 procedure TMainForm.ShellListViewSelectItem(Sender: TObject; Item: TListItem;
   Selected: Boolean);
 begin
@@ -380,22 +393,16 @@ begin
   end;
 end;
 
-procedure TMainForm.ShellGetImageIndex(Sender: TObject;
+procedure TMainForm.ShellTreeViewGetImageIndex(Sender: TObject;
   Node: TTreeNode);
 begin
-  if Sender = ShellTreeView then
-    Node.ImageIndex := 0
-  else if Sender = ShellListView then
-    Node.ImageIndex := 2;
+  Node.ImageIndex := 0;
 end;
 
-procedure TMainForm.ShellGetSelectedIndex(Sender: TObject;
+procedure TMainForm.ShellTreeViewGetSelectedIndex(Sender: TObject;
   Node: TTreeNode);
 begin
-  if Sender = ShellTreeView then
-    Node.SelectedIndex := 1
-  else if Sender = ShellListView then
-    Node.ImageIndex := 3;
+  Node.SelectedIndex := 1;
 end;
 
 procedure TMainForm.Show_bKGD(AChunk: TpngChunk);
